@@ -926,7 +926,16 @@ function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <div>© 2026 AquaVista Beverages Pvt. Ltd. All rights reserved.</div>
+          <div className="flex items-center gap-2">
+            <span>© 2026 AquaVista Beverages Pvt. Ltd. All rights reserved.</span>
+            {/* Secret theme toggle — intentionally subtle */}
+            <button
+              aria-label="Toggle theme"
+              onClick={onToggleTheme}
+              className="ml-1 h-2 w-2 rounded-full bg-primary/40 opacity-30 transition-all duration-300 hover:scale-150 hover:bg-primary hover:opacity-100"
+              title="✦"
+            />
+          </div>
           <div className="flex gap-5">
             <a href="#" className="hover:text-foreground">Privacy</a>
             <a href="#" className="hover:text-foreground">Terms</a>
@@ -940,9 +949,29 @@ function Footer() {
 
 /* ---------------- Page ---------------- */
 function Landing() {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const stored = (typeof window !== "undefined" && localStorage.getItem("av-theme")) as
+      | "dark"
+      | "light"
+      | null;
+    if (stored) setTheme(stored);
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle("light", theme === "light");
+    try {
+      localStorage.setItem("av-theme", theme);
+    } catch {}
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
-      <Toaster theme="dark" />
+    <div className="relative min-h-screen overflow-x-hidden transition-colors duration-500">
+      <Toaster theme={theme} />
       <Nav />
       <main>
         <Hero />
@@ -951,7 +980,8 @@ function Landing() {
         <Manufacturing />
         <Enquiry />
       </main>
-      <Footer />
+      <Footer onToggleTheme={toggleTheme} />
     </div>
   );
 }
+
