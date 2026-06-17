@@ -144,13 +144,13 @@
       linear-gradient(180deg, oklch(0.98 0.005 250), oklch(0.95 0.01 245));
     --shadow-card: 0 20px 60px -20px oklch(0.3 0.05 252 / 0.18);
   }
-}
 
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
 }
+
 
 @utility glass {
   background: var(--glass);
