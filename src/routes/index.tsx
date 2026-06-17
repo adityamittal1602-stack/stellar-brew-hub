@@ -857,7 +857,7 @@ function Field({
 }
 
 /* ---------------- Footer ---------------- */
-function Footer() {
+function Footer({ onToggleTheme }: { onToggleTheme: () => void }) {
   return (
     <footer className="relative border-t border-white/10 pt-16 pb-10">
       <div className="mx-auto max-w-7xl px-4">
