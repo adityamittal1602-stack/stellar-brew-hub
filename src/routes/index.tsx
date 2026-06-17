@@ -1,5 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useRef, useState, type ReactNode } from "react";
+import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
 import {
   Menu,
   X,
@@ -424,36 +426,57 @@ function About() {
 }
 
 /* ---------------- Products ---------------- */
+type ProductCategory = "soft-drinks" | "juices" | "water";
+
+type Product = {
+  id: string;
+  name: string;
+  category: ProductCategory;
+  size: string;
+  tagline: string;
+  hue: string;
+  icon: ReactNode;
+};
+
+const CATEGORY_META: Record<ProductCategory, { label: string; full: string }> = {
+  "soft-drinks": { label: "Soft Drinks", full: "Carbonated Soft Drinks" },
+  juices: { label: "Juices", full: "Fruit Drinks & Juices" },
+  water: { label: "Water", full: "Packaged Drinking Water" },
+};
+
+// Add new products by appending to this list — UI updates automatically.
+const PRODUCTS: Product[] = [
+  { id: "p01", name: "AquaVista Cola", category: "soft-drinks", size: "300ml · 750ml · 2L", tagline: "Bold caramel fizz, signature recipe.", hue: "from-[oklch(0.55_0.18_25)] to-[oklch(0.4_0.12_20)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p02", name: "Lemon-Lime Burst", category: "soft-drinks", size: "300ml · 600ml", tagline: "Crisp citrus with real lemon notes.", hue: "from-[oklch(0.82_0.18_120)] to-[oklch(0.65_0.18_110)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p03", name: "Orange Sparkle", category: "soft-drinks", size: "300ml · 750ml", tagline: "Sun-ripened orange, perfectly fizzed.", hue: "from-[oklch(0.78_0.18_70)] to-[oklch(0.6_0.18_50)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p04", name: "Jeera Fizz Masala", category: "soft-drinks", size: "300ml · 600ml", tagline: "Indian spiced soda — desi favorite.", hue: "from-[oklch(0.55_0.1_80)] to-[oklch(0.4_0.08_60)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p05", name: "Mango Pulp Drink", category: "juices", size: "200ml · 600ml · 1L", tagline: "Real Alphonso pulp, no concentrate.", hue: "from-[oklch(0.78_0.18_75)] to-[oklch(0.6_0.18_55)]", icon: <GlassWater className="h-5 w-5" /> },
+  { id: "p06", name: "Crisp Apple Juice", category: "juices", size: "200ml · 1L", tagline: "Cold-pressed, naturally cloudy.", hue: "from-[oklch(0.78_0.14_140)] to-[oklch(0.55_0.16_135)]", icon: <GlassWater className="h-5 w-5" /> },
+  { id: "p07", name: "Mixed Fruit Medley", category: "juices", size: "200ml · 1L", tagline: "Five-fruit blend, balanced sweetness.", hue: "from-[oklch(0.72_0.18_30)] to-[oklch(0.55_0.18_15)]", icon: <GlassWater className="h-5 w-5" /> },
+  { id: "p08", name: "AquaVista Pure 500ml", category: "water", size: "500ml", tagline: "Multi-stage purified, daily essential.", hue: "from-[oklch(0.78_0.12_220)] to-[oklch(0.55_0.16_240)]", icon: <Droplets className="h-5 w-5" /> },
+  { id: "p09", name: "AquaVista Pure 1L", category: "water", size: "1 Litre", tagline: "Family format — premium mineral water.", hue: "from-[oklch(0.76_0.14_215)] to-[oklch(0.55_0.18_245)]", icon: <Droplets className="h-5 w-5" /> },
+  { id: "p10", name: "AquaVista Pure 2L", category: "water", size: "2 Litre", tagline: "Household & HoReCa format.", hue: "from-[oklch(0.7_0.14_210)] to-[oklch(0.48_0.18_250)]", icon: <Droplets className="h-5 w-5" /> },
+];
+
+const TABS: Array<{ id: "all" | ProductCategory; label: string }> = [
+  { id: "all", label: "All Products" },
+  { id: "soft-drinks", label: "Soft Drinks" },
+  { id: "juices", label: "Juices" },
+  { id: "water", label: "Water" },
+];
+
 function Products() {
-  const cats = [
-    {
-      icon: <CupSoda className="h-6 w-6" />,
-      title: "Carbonated Soft Drinks",
-      tag: "18 SKUs",
-      body: "Cola, lemon, orange and signature regional flavors — engineered for fizz retention and shelf stability.",
-      hue: "from-[oklch(0.6_0.22_25)] to-[oklch(0.55_0.18_15)]",
-    },
-    {
-      icon: <GlassWater className="h-6 w-6" />,
-      title: "Fruit Drinks",
-      tag: "14 SKUs",
-      body: "Mango, mixed-fruit, guava and lychee variants made with real fruit pulp and zero artificial colors.",
-      hue: "from-[oklch(0.78_0.18_70)] to-[oklch(0.65_0.18_45)]",
-    },
-    {
-      icon: <Droplets className="h-6 w-6" />,
-      title: "Packaged Drinking Water",
-      tag: "8 SKUs",
-      body: "Multi-stage purified water across 250ml–20L formats. Trusted by HoReCa, retail and institutional buyers.",
-      hue: "from-[oklch(0.7_0.14_220)] to-[oklch(0.55_0.18_245)]",
-    },
-  ];
+  const [active, setActive] = useState<"all" | ProductCategory>("all");
+  const filtered = useMemo(
+    () => (active === "all" ? PRODUCTS : PRODUCTS.filter((p) => p.category === active)),
+    [active],
+  );
 
   return (
     <section id="products" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4">
         <SectionHead
-          eyebrow="Product Portfolio"
+          eyebrow="Product Showroom"
           title={
             <>
               40+ premium beverages,
@@ -463,41 +486,108 @@ function Products() {
           sub="Every product is formulated, tested and bottled in-house — giving partners total visibility from concentrate to consumer."
         />
 
-        <div className="mt-14 grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-          {cats.map((c, i) => (
-            <Reveal key={c.title} delay={i * 110}>
-              <article className="glass-card hover-lift group relative overflow-hidden rounded-3xl p-6 sm:p-7">
+        {/* Filter tabs */}
+        <Reveal delay={120}>
+          <div className="mt-10 flex flex-wrap gap-2 sm:gap-3">
+            {TABS.map((t) => {
+              const isActive = active === t.id;
+              const count =
+                t.id === "all" ? PRODUCTS.length : PRODUCTS.filter((p) => p.category === t.id).length;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setActive(t.id)}
+                  className={`group relative overflow-hidden rounded-full border px-4 py-2 text-xs font-semibold uppercase tracking-wider transition-all duration-300 active:scale-95 sm:px-5 sm:py-2.5 sm:text-sm ${
+                    isActive
+                      ? "border-transparent text-primary-foreground shadow-[0_10px_30px_-10px_oklch(0.6_0.2_240/0.6)]"
+                      : "border-white/10 bg-white/[0.04] text-muted-foreground hover:scale-[1.04] hover:border-white/20 hover:text-foreground"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId="tab-pill"
+                      className="absolute inset-0 -z-10 bg-gradient-to-r from-primary to-[oklch(0.78_0.16_230)]"
+                      transition={{ type: "spring", stiffness: 320, damping: 30 }}
+                    />
+                  )}
+                  {t.label}
+                  <span className="ml-2 rounded-full bg-black/20 px-1.5 py-0.5 text-[10px] tabular-nums">
+                    {count}
+                  </span>
+                </button>
+              );
+            })}
+          </div>
+        </Reveal>
+
+        {/* Product grid */}
+        <motion.div
+          layout
+          className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3"
+        >
+          <AnimatePresence mode="popLayout">
+            {filtered.map((p, i) => (
+              <motion.article
+                key={p.id}
+                layout
+                initial={{ opacity: 0, y: 24, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -16, scale: 0.94 }}
+                transition={{
+                  duration: 0.45,
+                  delay: i * 0.05,
+                  ease: [0.2, 0.7, 0.2, 1],
+                }}
+                whileHover={{ y: -6 }}
+                whileTap={{ scale: 0.98 }}
+                className="glass-card group relative overflow-hidden rounded-3xl p-5 sm:p-6"
+              >
                 <div
-                  className={`pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gradient-to-br ${c.hue} opacity-25 blur-3xl transition-opacity duration-500 group-hover:opacity-50`}
+                  className={`pointer-events-none absolute -right-12 -top-12 h-44 w-44 rounded-full bg-gradient-to-br ${p.hue} opacity-25 blur-3xl transition-opacity duration-500 group-hover:opacity-60`}
+                />
+                <div
+                  className="pointer-events-none absolute inset-0 rounded-3xl opacity-0 transition-opacity duration-500 group-hover:opacity-100"
+                  style={{
+                    background:
+                      "radial-gradient(400px circle at 50% 0%, oklch(0.7 0.16 240 / 0.25), transparent 60%)",
+                  }}
                 />
                 <div className="relative">
                   <div className="flex items-center justify-between">
                     <span
-                      className={`grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${c.hue} text-white shadow-lg`}
+                      className={`grid h-11 w-11 place-items-center rounded-2xl bg-gradient-to-br ${p.hue} text-white shadow-lg`}
                     >
-                      {c.icon}
+                      {p.icon}
                     </span>
-                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
-                      {c.tag}
+                    <span className="rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground">
+                      {CATEGORY_META[p.category].label}
                     </span>
                   </div>
-                  <h3 className="mt-6 text-xl font-semibold sm:text-2xl">{c.title}</h3>
-                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground">
-                    {c.body}
-                  </p>
-                  <div className="mt-6 flex items-center gap-2 text-sm font-medium text-primary opacity-80 transition-all group-hover:gap-3 group-hover:opacity-100">
-                    View category
-                    <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
+                  <h3 className="mt-5 text-lg font-semibold leading-tight sm:text-xl">{p.name}</h3>
+                  <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{p.tagline}</p>
+                  <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 text-xs">
+                    <span className="text-muted-foreground">{p.size}</span>
+                    <span className="flex items-center gap-1 font-medium text-primary opacity-80 transition-all group-hover:gap-2 group-hover:opacity-100">
+                      Details
+                      <ArrowRight className="h-3.5 w-3.5" />
+                    </span>
                   </div>
                 </div>
-              </article>
-            </Reveal>
-          ))}
-        </div>
+              </motion.article>
+            ))}
+          </AnimatePresence>
+        </motion.div>
+
+        {filtered.length === 0 && (
+          <p className="mt-10 text-center text-sm text-muted-foreground">
+            No products in this category yet.
+          </p>
+        )}
       </div>
     </section>
   );
 }
+
 
 /* ---------------- Manufacturing (Bento) ---------------- */
 function Manufacturing() {
@@ -767,7 +857,7 @@ function Field({
 }
 
 /* ---------------- Footer ---------------- */
-function Footer() {
+function Footer({ onToggleTheme }: { onToggleTheme: () => void }) {
   return (
     <footer className="relative border-t border-white/10 pt-16 pb-10">
       <div className="mx-auto max-w-7xl px-4">
@@ -836,7 +926,16 @@ function Footer() {
         </div>
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
-          <div>© 2026 AquaVista Beverages Pvt. Ltd. All rights reserved.</div>
+          <div className="flex items-center gap-2">
+            <span>© 2026 AquaVista Beverages Pvt. Ltd. All rights reserved.</span>
+            {/* Secret theme toggle — intentionally subtle */}
+            <button
+              aria-label="Toggle theme"
+              onClick={onToggleTheme}
+              className="ml-1 h-2 w-2 rounded-full bg-primary/40 opacity-30 transition-all duration-300 hover:scale-150 hover:bg-primary hover:opacity-100"
+              title="✦"
+            />
+          </div>
           <div className="flex gap-5">
             <a href="#" className="hover:text-foreground">Privacy</a>
             <a href="#" className="hover:text-foreground">Terms</a>
@@ -850,9 +949,29 @@ function Footer() {
 
 /* ---------------- Page ---------------- */
 function Landing() {
+  const [theme, setTheme] = useState<"dark" | "light">("dark");
+
+  useEffect(() => {
+    const stored = (typeof window !== "undefined" && localStorage.getItem("av-theme")) as
+      | "dark"
+      | "light"
+      | null;
+    if (stored) setTheme(stored);
+  }, []);
+
+  useEffect(() => {
+    const root = document.documentElement;
+    root.classList.toggle("light", theme === "light");
+    try {
+      localStorage.setItem("av-theme", theme);
+    } catch {}
+  }, [theme]);
+
+  const toggleTheme = () => setTheme((t) => (t === "dark" ? "light" : "dark"));
+
   return (
-    <div className="relative min-h-screen overflow-x-hidden">
-      <Toaster theme="dark" />
+    <div className="relative min-h-screen overflow-x-hidden transition-colors duration-500">
+      <Toaster theme={theme} />
       <Nav />
       <main>
         <Hero />
@@ -861,7 +980,8 @@ function Landing() {
         <Manufacturing />
         <Enquiry />
       </main>
-      <Footer />
+      <Footer onToggleTheme={toggleTheme} />
     </div>
   );
 }
+

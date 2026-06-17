@@ -63,6 +63,35 @@
   --glass-border: oklch(1 0 0 / 0.12);
   --azure: oklch(0.68 0.17 245);
   --azure-glow: oklch(0.78 0.16 230);
+}
+
+:root.light {
+  --background: oklch(0.985 0.005 250);
+  --foreground: oklch(0.18 0.03 252);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.18 0.03 252);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.18 0.03 252);
+  --primary: oklch(0.55 0.18 245);
+  --primary-foreground: oklch(0.985 0.005 250);
+  --secondary: oklch(0.95 0.01 250);
+  --secondary-foreground: oklch(0.18 0.03 252);
+  --muted: oklch(0.95 0.01 250);
+  --muted-foreground: oklch(0.45 0.02 250);
+  --accent: oklch(0.93 0.02 245);
+  --accent-foreground: oklch(0.18 0.03 252);
+  --border: oklch(0.18 0.03 252 / 10%);
+  --input: oklch(0.18 0.03 252 / 12%);
+  --ring: oklch(0.55 0.18 245);
+
+  --glass: oklch(1 0 0 / 0.7);
+  --glass-border: oklch(0.18 0.03 252 / 0.1);
+  --azure: oklch(0.55 0.18 245);
+  --azure-glow: oklch(0.6 0.18 220);
+}
+
+:root {
+
 
   --gradient-hero: radial-gradient(
       80% 60% at 20% 10%,
@@ -98,12 +127,30 @@
       radial-gradient(60% 40% at 50% 0%, oklch(0.3 0.08 245 / 0.35), transparent 70%),
       radial-gradient(40% 30% at 100% 100%, oklch(0.3 0.1 220 / 0.25), transparent 70%);
     background-attachment: fixed;
+    transition: background-color 0.5s ease, color 0.5s ease;
   }
+  :root.light body {
+    background-image:
+      radial-gradient(60% 40% at 50% 0%, oklch(0.7 0.12 245 / 0.18), transparent 70%),
+      radial-gradient(40% 30% at 100% 100%, oklch(0.7 0.12 220 / 0.14), transparent 70%);
+  }
+  :root.light {
+    --gradient-hero: radial-gradient(
+        80% 60% at 20% 10%,
+        oklch(0.75 0.1 245 / 0.4),
+        transparent 60%
+      ),
+      radial-gradient(60% 50% at 90% 30%, oklch(0.8 0.1 220 / 0.3), transparent 65%),
+      linear-gradient(180deg, oklch(0.98 0.005 250), oklch(0.95 0.01 245));
+    --shadow-card: 0 20px 60px -20px oklch(0.3 0.05 252 / 0.18);
+  }
+
   h1, h2, h3, h4 {
     font-family: var(--font-display);
     letter-spacing: -0.02em;
   }
 }
+
 
 @utility glass {
   background: var(--glass);
