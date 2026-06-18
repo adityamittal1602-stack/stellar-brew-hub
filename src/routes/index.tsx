@@ -10,7 +10,7 @@ import {
   Factory,
   ShieldCheck,
   Gauge,
-  Droplets,
+  
   CupSoda,
   GlassWater,
   MapPin,
@@ -22,6 +22,10 @@ import {
   Layers,
   Loader2,
   CheckCircle2,
+  Store,
+  Handshake,
+  TrendingUp,
+  PackageCheck,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -35,21 +39,23 @@ import {
 } from "@/components/ui/select";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { AmbientScene, HeroBottle } from "@/components/Scene3D";
+import { Magnetic } from "@/components/Magnetic";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "AquaVista Beverages — Refreshing the Nation Since 2003" },
+      { title: "Shyam Beverages — Premium Cold Drinks & Pulp Juices Since 2000" },
       {
         name: "description",
         content:
-          "Premium beverage manufacturer with 40+ products across India. Partner with us for distribution, retail and export opportunities.",
+          "Shyam Beverages — large-scale manufacturer of premium cold drinks and pulp-based juices since 2000. Partner with us for distribution, retail and exports.",
       },
-      { property: "og:title", content: "AquaVista Beverages — Refreshing the Nation Since 2003" },
+      { property: "og:title", content: "Shyam Beverages — Established 2000" },
       {
         property: "og:description",
         content:
-          "Manufacturing 40+ premium beverage products with scale, precision, and national reach.",
+          "Industry-leading enterprise manufacturing cold drinks and pulp-based juices at scale across India.",
       },
     ],
   }),
@@ -94,6 +100,25 @@ function Reveal({
   );
 }
 
+/* ---------------- Monogram logo ---------------- */
+function Monogram({ className = "h-9 w-9" }: { className?: string }) {
+  return (
+    <span
+      className={`relative grid place-items-center rounded-xl bg-gradient-to-br from-primary to-[oklch(0.78_0.16_230)] shadow-[0_8px_24px_-8px_oklch(0.6_0.2_240/0.7)] ${className}`}
+    >
+      <svg viewBox="0 0 24 24" className="h-5 w-5 text-primary-foreground" fill="none">
+        <path
+          d="M5 4 L9 4 L12 11 L15 4 L19 4 L13.5 17 L13.5 20 L10.5 20 L10.5 17 Z"
+          fill="currentColor"
+          stroke="currentColor"
+          strokeWidth="0.5"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </span>
+  );
+}
+
 /* ---------------- Navigation ---------------- */
 function Nav() {
   const [scrolled, setScrolled] = useState(false);
@@ -108,9 +133,10 @@ function Nav() {
 
   const links = [
     { href: "#home", label: "Home" },
-    { href: "#about", label: "About Us" },
+    { href: "#about", label: "Legacy" },
     { href: "#products", label: "Products" },
     { href: "#manufacturing", label: "Manufacturing" },
+    { href: "#portals", label: "B2B" },
     { href: "#enquiry", label: "Enquiry" },
   ];
 
@@ -127,13 +153,11 @@ function Nav() {
           }`}
         >
           <a href="#home" className="flex items-center gap-2.5">
-            <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary to-[oklch(0.78_0.16_230)] shadow-[0_8px_24px_-8px_oklch(0.6_0.2_240/0.7)]">
-              <Droplets className="h-5 w-5 text-primary-foreground" strokeWidth={2.5} />
-            </span>
+            <Monogram />
             <div className="flex flex-col leading-none">
-              <span className="text-sm font-bold tracking-tight">AquaVista</span>
+              <span className="text-sm font-bold tracking-tight">Shyam Beverages</span>
               <span className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                Beverages
+                Est. 2000
               </span>
             </div>
           </a>
@@ -153,10 +177,12 @@ function Nav() {
 
           <div className="flex items-center gap-2">
             <a href="#enquiry" className="hidden sm:inline-flex">
-              <Button className="btn-hero h-10 rounded-xl px-5">
-                Partner With Us
-                <ArrowRight className="h-4 w-4" />
-              </Button>
+              <Magnetic>
+                <Button className="btn-hero h-10 rounded-xl px-5">
+                  Partner With Us
+                  <ArrowRight className="h-4 w-4" />
+                </Button>
+              </Magnetic>
             </a>
             <button
               aria-label="Menu"
@@ -199,15 +225,20 @@ function Nav() {
 function Hero() {
   return (
     <section id="home" className="bg-hero relative min-h-screen overflow-hidden">
-      {/* ambient blobs */}
+      {/* 3D ambient scene */}
+      <div className="pointer-events-none absolute inset-0 opacity-70">
+        <AmbientScene />
+      </div>
+
+      {/* ambient blobs + grid overlay */}
       <div className="pointer-events-none absolute inset-0">
-        <div className="animate-float-slow absolute -left-32 top-24 h-96 w-96 rounded-full bg-[oklch(0.5_0.18_245/0.35)] blur-3xl" />
+        <div className="animate-float-slow absolute -left-32 top-24 h-96 w-96 rounded-full bg-[oklch(0.5_0.18_245/0.25)] blur-3xl" />
         <div
-          className="animate-float-slow absolute right-[-10%] top-1/3 h-[28rem] w-[28rem] rounded-full bg-[oklch(0.55_0.16_215/0.28)] blur-3xl"
+          className="animate-float-slow absolute right-[-10%] top-1/3 h-[28rem] w-[28rem] rounded-full bg-[oklch(0.55_0.16_215/0.2)] blur-3xl"
           style={{ animationDelay: "-6s" }}
         />
         <div
-          className="absolute inset-0 opacity-[0.07]"
+          className="absolute inset-0 opacity-[0.05]"
           style={{
             backgroundImage:
               "linear-gradient(oklch(1 0 0 / 0.6) 1px, transparent 1px), linear-gradient(90deg, oklch(1 0 0 / 0.6) 1px, transparent 1px)",
@@ -218,65 +249,79 @@ function Hero() {
         />
       </div>
 
-      <div className="relative mx-auto flex min-h-screen max-w-7xl flex-col justify-center px-4 pt-32 pb-20">
-        <Reveal>
-          <div className="glass inline-flex w-fit items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
-            <Sparkles className="h-3.5 w-3.5 text-primary" />
-            Established 2003 · Trusted by 1,200+ Partners
-          </div>
-        </Reveal>
+      <div className="relative mx-auto grid min-h-screen max-w-7xl grid-cols-1 items-center gap-10 px-4 pt-32 pb-20 lg:grid-cols-[1.25fr_1fr]">
+        <div>
+          <Reveal>
+            <div className="glass inline-flex w-fit items-center gap-2 rounded-full px-4 py-1.5 text-xs font-medium uppercase tracking-[0.18em] text-muted-foreground">
+              <Sparkles className="h-3.5 w-3.5 text-primary" />
+              Established 2000 · Trusted by 1,500+ Partners
+            </div>
+          </Reveal>
 
-        <Reveal delay={120}>
-          <h1 className="text-gradient mt-6 max-w-5xl text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.5rem]">
-            Refreshing the Nation
-            <br />
-            <span className="text-azure-gradient">Since 2003.</span>
-          </h1>
-        </Reveal>
+          <Reveal delay={120}>
+            <h1 className="text-gradient mt-6 max-w-3xl text-5xl font-bold leading-[0.95] tracking-tight sm:text-6xl md:text-7xl lg:text-[5.25rem]">
+              Crafting India's
+              <br />
+              <span className="text-azure-gradient">Premium Refreshment.</span>
+            </h1>
+          </Reveal>
 
-        <Reveal delay={220}>
-          <p className="mt-6 max-w-2xl text-base text-muted-foreground sm:text-lg md:text-xl">
-            Manufacturing 40+ premium beverage products with scale, precision, and
-            national reach — engineered for India's most ambitious distribution
-            partners.
-          </p>
-        </Reveal>
+          <Reveal delay={220}>
+            <p className="mt-6 max-w-xl text-base text-muted-foreground sm:text-lg md:text-xl">
+              A quarter-century of manufacturing excellence in cold drinks and
+              pulp-based juices — engineered at scale for India's most ambitious
+              distribution partners.
+            </p>
+          </Reveal>
 
-        <Reveal delay={320}>
-          <div className="mt-9 flex flex-col gap-3 sm:flex-row">
-            <a href="#products">
-              <Button className="btn-hero h-12 rounded-xl px-6 text-sm sm:text-base">
-                Explore Our Portfolio
-                <ArrowRight className="h-4 w-4" />
-              </Button>
-            </a>
-            <a href="#enquiry">
-              <Button className="btn-outline-glow h-12 rounded-xl border bg-transparent px-6 text-sm sm:text-base">
-                Distributor Opportunities
-              </Button>
-            </a>
-          </div>
-        </Reveal>
+          <Reveal delay={320}>
+            <div className="mt-9 flex flex-col gap-3 sm:flex-row">
+              <Magnetic>
+                <a href="#products">
+                  <Button className="btn-hero h-12 rounded-xl px-6 text-sm sm:text-base">
+                    Explore Our Portfolio
+                    <ArrowRight className="h-4 w-4" />
+                  </Button>
+                </a>
+              </Magnetic>
+              <Magnetic strength={0.2}>
+                <a href="#portals">
+                  <Button className="btn-outline-glow h-12 rounded-xl border bg-transparent px-6 text-sm sm:text-base">
+                    B2B Partner Portals
+                  </Button>
+                </a>
+              </Magnetic>
+            </div>
+          </Reveal>
 
-        {/* hero stats */}
-        <Reveal delay={460}>
-          <div className="mt-16 grid grid-cols-2 gap-3 sm:mt-20 sm:grid-cols-4 sm:gap-4">
-            {[
-              { k: "40+", v: "SKUs Manufactured" },
-              { k: "4", v: "States Served" },
-              { k: "22+", v: "Years of Trust" },
-              { k: "1.2K+", v: "Active Partners" },
-            ].map((s) => (
-              <div key={s.v} className="glass-card rounded-2xl p-4 sm:p-5">
-                <div className="text-azure-gradient text-2xl font-bold sm:text-3xl">
-                  {s.k}
+          {/* hero stats */}
+          <Reveal delay={460}>
+            <div className="mt-14 grid grid-cols-2 gap-3 sm:mt-16 sm:grid-cols-4 sm:gap-4">
+              {[
+                { k: "50+", v: "Active SKUs" },
+                { k: "12", v: "States Served" },
+                { k: "25+", v: "Years of Trust" },
+                { k: "1.5K+", v: "Channel Partners" },
+              ].map((s) => (
+                <div key={s.v} className="glass-card rounded-2xl p-4 sm:p-5">
+                  <div className="text-azure-gradient text-2xl font-bold sm:text-3xl">
+                    {s.k}
+                  </div>
+                  <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground sm:text-xs">
+                    {s.v}
+                  </div>
                 </div>
-                <div className="mt-1 text-[11px] uppercase tracking-wider text-muted-foreground sm:text-xs">
-                  {s.v}
-                </div>
-              </div>
-            ))}
+              ))}
+            </div>
+          </Reveal>
+        </div>
+
+        {/* 3D bottle */}
+        <Reveal delay={200} className="relative hidden h-[520px] w-full lg:block">
+          <div className="absolute inset-0">
+            <HeroBottle />
           </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-background to-transparent" />
         </Reveal>
       </div>
     </section>
@@ -314,33 +359,33 @@ function SectionHead({
   );
 }
 
-/* ---------------- About / Journey ---------------- */
+/* ---------------- About / Legacy Timeline ---------------- */
 function About() {
   const milestones = [
     {
-      year: "2003",
+      year: "2000",
       title: "Foundation Laid",
-      body: "Began local production with a single bottling line and an unwavering belief in quality-first beverages.",
+      body: "Shyam Beverages was founded with a single bottling line and a relentless focus on quality-first refreshment.",
     },
     {
-      year: "2009",
-      title: "Chhattisgarh Expansion",
-      body: "Scaled across Chhattisgarh, becoming a household name in the region.",
+      year: "2006",
+      title: "Pulp Juice Division",
+      body: "Launched our first pulp-based juice line — real fruit, no concentrates — pioneering a new category in the region.",
     },
     {
-      year: "2014",
-      title: "Madhya Pradesh Network",
-      body: "Built a dense distributor network across MP with cold-chain logistics.",
+      year: "2012",
+      title: "Multi-Plant Expansion",
+      body: "Crossed three manufacturing facilities and a 25+ SKU portfolio across cold drinks and juices.",
     },
     {
-      year: "2019",
-      title: "Uttar Pradesh Rollout",
-      body: "Crossed 25+ SKUs and entered Uttar Pradesh with high-speed automated lines.",
+      year: "2018",
+      title: "Automation & Scale",
+      body: "Commissioned high-speed automated lines, reaching 36,000 bottles/hour peak throughput.",
     },
     {
       year: "2024",
-      title: "Haryana & Beyond",
-      body: "National-grade infrastructure supplying Haryana and exploring export corridors.",
+      title: "National Footprint",
+      body: "Operating across 12 states with 1,500+ active channel partners and exploring export corridors.",
     },
   ];
 
@@ -348,38 +393,37 @@ function About() {
     <section id="about" className="relative py-24 sm:py-32">
       <div className="mx-auto max-w-7xl px-4">
         <SectionHead
-          eyebrow="The Journey"
+          eyebrow="The Legacy"
           title={
             <>
-              Two decades of building India's most
+              Twenty-five years of building India's most
               <br className="hidden md:block" /> trusted beverage operation.
             </>
           }
-          sub="From a single regional facility to a multi-state powerhouse — every milestone was earned with consistency, compliance and customer obsession."
+          sub="From a single regional facility to a multi-state powerhouse — every milestone earned with consistency, compliance, and customer obsession."
         />
 
         <div className="relative mt-16 grid gap-8 lg:grid-cols-[1.1fr_1fr] lg:gap-16">
-          {/* Left: portrait copy */}
           <Reveal>
             <div className="glass-card sticky top-28 rounded-3xl p-6 sm:p-8">
               <div className="flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-primary">
-                <Award className="h-4 w-4" /> Regional Leadership
+                <Award className="h-4 w-4" /> Industry Leadership
               </div>
               <h3 className="mt-4 text-2xl font-bold leading-tight sm:text-3xl">
                 Quality is the only language our customers respect.
               </h3>
               <p className="mt-4 text-sm leading-relaxed text-muted-foreground sm:text-base">
-                AquaVista Beverages was founded in 2003 with one objective —
-                deliver world-class beverages at India-scale economics. Today our
-                operations span Chhattisgarh, Madhya Pradesh, Uttar Pradesh and
-                Haryana, with 40+ premium SKUs leaving our gates every day.
+                Shyam Beverages was founded in 2000 with one objective — deliver
+                world-class beverages at India-scale economics. Today our cold
+                drinks and pulp-based juices ship across 12 states, with 50+
+                premium SKUs leaving our gates every single day.
               </p>
               <div className="mt-6 grid grid-cols-2 gap-3">
                 {[
                   { i: <Factory className="h-4 w-4" />, t: "ISO-Certified Plants" },
                   { i: <Truck className="h-4 w-4" />, t: "Pan-India Cold Chain" },
                   { i: <ShieldCheck className="h-4 w-4" />, t: "FSSAI Compliance" },
-                  { i: <Layers className="h-4 w-4" />, t: "40+ Active SKUs" },
+                  { i: <Layers className="h-4 w-4" />, t: "50+ Active SKUs" },
                 ].map((x) => (
                   <div
                     key={x.t}
@@ -395,7 +439,6 @@ function About() {
             </div>
           </Reveal>
 
-          {/* Right: timeline */}
           <div className="relative">
             <div className="pointer-events-none absolute left-[14px] top-2 bottom-2 w-px bg-gradient-to-b from-primary/60 via-white/10 to-transparent sm:left-[18px]" />
             <ul className="space-y-7">
@@ -426,7 +469,7 @@ function About() {
 }
 
 /* ---------------- Products ---------------- */
-type ProductCategory = "soft-drinks" | "juices" | "water";
+type ProductCategory = "cold-drinks" | "pulp-juices";
 
 type Product = {
   id: string;
@@ -439,30 +482,28 @@ type Product = {
 };
 
 const CATEGORY_META: Record<ProductCategory, { label: string; full: string }> = {
-  "soft-drinks": { label: "Soft Drinks", full: "Carbonated Soft Drinks" },
-  juices: { label: "Juices", full: "Fruit Drinks & Juices" },
-  water: { label: "Water", full: "Packaged Drinking Water" },
+  "cold-drinks": { label: "Cold Drinks", full: "Carbonated Cold Drinks" },
+  "pulp-juices": { label: "Pulp Juices", full: "Pulp-Based Fruit Juices" },
 };
 
 // Add new products by appending to this list — UI updates automatically.
 const PRODUCTS: Product[] = [
-  { id: "p01", name: "AquaVista Cola", category: "soft-drinks", size: "300ml · 750ml · 2L", tagline: "Bold caramel fizz, signature recipe.", hue: "from-[oklch(0.55_0.18_25)] to-[oklch(0.4_0.12_20)]", icon: <CupSoda className="h-5 w-5" /> },
-  { id: "p02", name: "Lemon-Lime Burst", category: "soft-drinks", size: "300ml · 600ml", tagline: "Crisp citrus with real lemon notes.", hue: "from-[oklch(0.82_0.18_120)] to-[oklch(0.65_0.18_110)]", icon: <CupSoda className="h-5 w-5" /> },
-  { id: "p03", name: "Orange Sparkle", category: "soft-drinks", size: "300ml · 750ml", tagline: "Sun-ripened orange, perfectly fizzed.", hue: "from-[oklch(0.78_0.18_70)] to-[oklch(0.6_0.18_50)]", icon: <CupSoda className="h-5 w-5" /> },
-  { id: "p04", name: "Jeera Fizz Masala", category: "soft-drinks", size: "300ml · 600ml", tagline: "Indian spiced soda — desi favorite.", hue: "from-[oklch(0.55_0.1_80)] to-[oklch(0.4_0.08_60)]", icon: <CupSoda className="h-5 w-5" /> },
-  { id: "p05", name: "Mango Pulp Drink", category: "juices", size: "200ml · 600ml · 1L", tagline: "Real Alphonso pulp, no concentrate.", hue: "from-[oklch(0.78_0.18_75)] to-[oklch(0.6_0.18_55)]", icon: <GlassWater className="h-5 w-5" /> },
-  { id: "p06", name: "Crisp Apple Juice", category: "juices", size: "200ml · 1L", tagline: "Cold-pressed, naturally cloudy.", hue: "from-[oklch(0.78_0.14_140)] to-[oklch(0.55_0.16_135)]", icon: <GlassWater className="h-5 w-5" /> },
-  { id: "p07", name: "Mixed Fruit Medley", category: "juices", size: "200ml · 1L", tagline: "Five-fruit blend, balanced sweetness.", hue: "from-[oklch(0.72_0.18_30)] to-[oklch(0.55_0.18_15)]", icon: <GlassWater className="h-5 w-5" /> },
-  { id: "p08", name: "AquaVista Pure 500ml", category: "water", size: "500ml", tagline: "Multi-stage purified, daily essential.", hue: "from-[oklch(0.78_0.12_220)] to-[oklch(0.55_0.16_240)]", icon: <Droplets className="h-5 w-5" /> },
-  { id: "p09", name: "AquaVista Pure 1L", category: "water", size: "1 Litre", tagline: "Family format — premium mineral water.", hue: "from-[oklch(0.76_0.14_215)] to-[oklch(0.55_0.18_245)]", icon: <Droplets className="h-5 w-5" /> },
-  { id: "p10", name: "AquaVista Pure 2L", category: "water", size: "2 Litre", tagline: "Household & HoReCa format.", hue: "from-[oklch(0.7_0.14_210)] to-[oklch(0.48_0.18_250)]", icon: <Droplets className="h-5 w-5" /> },
+  { id: "p01", name: "Shyam Cola", category: "cold-drinks", size: "300ml · 750ml · 2L", tagline: "Bold caramel fizz, our signature recipe.", hue: "from-[oklch(0.55_0.18_25)] to-[oklch(0.4_0.12_20)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p02", name: "Lemon-Lime Burst", category: "cold-drinks", size: "300ml · 600ml", tagline: "Crisp citrus with real lemon notes.", hue: "from-[oklch(0.82_0.18_120)] to-[oklch(0.65_0.18_110)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p03", name: "Orange Sparkle", category: "cold-drinks", size: "300ml · 750ml", tagline: "Sun-ripened orange, perfectly fizzed.", hue: "from-[oklch(0.78_0.18_70)] to-[oklch(0.6_0.18_50)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p04", name: "Jeera Fizz Masala", category: "cold-drinks", size: "300ml · 600ml", tagline: "Indian spiced soda — a desi favourite.", hue: "from-[oklch(0.55_0.1_80)] to-[oklch(0.4_0.08_60)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p05", name: "Cloud Soda", category: "cold-drinks", size: "300ml · 600ml", tagline: "Clear, crisp lemon-lime refresher.", hue: "from-[oklch(0.85_0.12_180)] to-[oklch(0.6_0.16_200)]", icon: <CupSoda className="h-5 w-5" /> },
+  { id: "p06", name: "Alphonso Mango Pulp", category: "pulp-juices", size: "200ml · 600ml · 1L", tagline: "Real Alphonso pulp, no concentrate.", hue: "from-[oklch(0.78_0.18_75)] to-[oklch(0.6_0.18_55)]", icon: <GlassWater className="h-5 w-5" /> },
+  { id: "p07", name: "Guava Pulp Nectar", category: "pulp-juices", size: "200ml · 1L", tagline: "Pink guava pulp, naturally sweet.", hue: "from-[oklch(0.78_0.14_15)] to-[oklch(0.6_0.16_5)]", icon: <GlassWater className="h-5 w-5" /> },
+  { id: "p08", name: "Litchi Pulp Delight", category: "pulp-juices", size: "200ml · 1L", tagline: "Hand-selected litchi, light and floral.", hue: "from-[oklch(0.82_0.1_350)] to-[oklch(0.65_0.14_340)]", icon: <GlassWater className="h-5 w-5" /> },
+  { id: "p09", name: "Mixed Fruit Medley", category: "pulp-juices", size: "200ml · 1L", tagline: "Five-fruit blend, balanced sweetness.", hue: "from-[oklch(0.72_0.18_30)] to-[oklch(0.55_0.18_15)]", icon: <GlassWater className="h-5 w-5" /> },
+  { id: "p10", name: "Crisp Apple Pulp", category: "pulp-juices", size: "200ml · 1L", tagline: "Cold-pressed, naturally cloudy.", hue: "from-[oklch(0.78_0.14_140)] to-[oklch(0.55_0.16_135)]", icon: <GlassWater className="h-5 w-5" /> },
 ];
 
 const TABS: Array<{ id: "all" | ProductCategory; label: string }> = [
   { id: "all", label: "All Products" },
-  { id: "soft-drinks", label: "Soft Drinks" },
-  { id: "juices", label: "Juices" },
-  { id: "water", label: "Water" },
+  { id: "cold-drinks", label: "Cold Drinks" },
+  { id: "pulp-juices", label: "Pulp Juices" },
 ];
 
 function Products() {
@@ -479,8 +520,8 @@ function Products() {
           eyebrow="Product Showroom"
           title={
             <>
-              40+ premium beverages,
-              <br className="hidden md:block" /> three flagship categories.
+              50+ premium beverages,
+              <br className="hidden md:block" /> two flagship categories.
             </>
           }
           sub="Every product is formulated, tested and bottled in-house — giving partners total visibility from concentrate to consumer."
@@ -520,7 +561,7 @@ function Products() {
           </div>
         </Reveal>
 
-        {/* Product grid */}
+        {/* Product grid — 3D glassmorphic pedestals */}
         <motion.div
           layout
           className="mt-10 grid gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-3"
@@ -538,8 +579,9 @@ function Products() {
                   delay: i * 0.05,
                   ease: [0.2, 0.7, 0.2, 1],
                 }}
-                whileHover={{ y: -6 }}
+                whileHover={{ y: -8, rotateX: 2, rotateY: -2 }}
                 whileTap={{ scale: 0.98 }}
+                style={{ transformStyle: "preserve-3d", perspective: 1000 }}
                 className="glass-card group relative overflow-hidden rounded-3xl p-5 sm:p-6"
               >
                 <div
@@ -565,7 +607,9 @@ function Products() {
                   </div>
                   <h3 className="mt-5 text-lg font-semibold leading-tight sm:text-xl">{p.name}</h3>
                   <p className="mt-1.5 text-sm leading-relaxed text-muted-foreground">{p.tagline}</p>
-                  <div className="mt-5 flex items-center justify-between border-t border-white/10 pt-4 text-xs">
+                  {/* glass pedestal */}
+                  <div className="relative mx-auto mt-6 h-1 w-3/4 rounded-full bg-gradient-to-r from-transparent via-white/30 to-transparent" />
+                  <div className="mt-4 flex items-center justify-between border-t border-white/10 pt-4 text-xs">
                     <span className="text-muted-foreground">{p.size}</span>
                     <span className="flex items-center gap-1 font-medium text-primary opacity-80 transition-all group-hover:gap-2 group-hover:opacity-100">
                       Details
@@ -588,7 +632,6 @@ function Products() {
   );
 }
 
-
 /* ---------------- Manufacturing (Bento) ---------------- */
 function Manufacturing() {
   return (
@@ -602,11 +645,10 @@ function Manufacturing() {
               <br className="hidden md:block" /> factory floors.
             </>
           }
-          sub="Our facilities are designed with highly organized, expert-led spatial layouts — purpose-built for architectural efficiency and optimal manufacturing flow."
+          sub="Our facilities are designed with highly organised, expert-led spatial layouts — purpose-built for architectural efficiency and optimal manufacturing flow."
         />
 
         <div className="mt-14 grid auto-rows-[minmax(180px,auto)] grid-cols-1 gap-4 md:grid-cols-6 md:gap-5">
-          {/* Bottling lines — wide */}
           <Reveal className="md:col-span-4 md:row-span-2">
             <div className="glass-card hover-lift relative h-full overflow-hidden rounded-3xl p-7 sm:p-9">
               <div className="absolute inset-0 opacity-30">
@@ -632,9 +674,9 @@ function Manufacturing() {
                 </p>
                 <div className="mt-8 grid grid-cols-3 gap-3 sm:max-w-md">
                   {[
-                    ["12", "Lines"],
+                    ["14", "Lines"],
                     ["99.4%", "Uptime"],
-                    ["6", "Plants"],
+                    ["7", "Plants"],
                   ].map(([k, v]) => (
                     <div key={v} className="rounded-xl border border-white/10 bg-white/[0.03] p-3">
                       <div className="text-azure-gradient text-xl font-bold">{k}</div>
@@ -648,7 +690,6 @@ function Manufacturing() {
             </div>
           </Reveal>
 
-          {/* QC */}
           <Reveal delay={120} className="md:col-span-2">
             <div className="glass-card hover-lift h-full rounded-3xl p-6">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-[oklch(0.6_0.18_150/0.2)] text-[oklch(0.78_0.16_150)]">
@@ -662,7 +703,6 @@ function Manufacturing() {
             </div>
           </Reveal>
 
-          {/* High-speed capacity */}
           <Reveal delay={180} className="md:col-span-2">
             <div className="glass-card hover-lift h-full rounded-3xl p-6">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-[oklch(0.65_0.2_30/0.2)] text-[oklch(0.78_0.18_40)]">
@@ -676,7 +716,6 @@ function Manufacturing() {
             </div>
           </Reveal>
 
-          {/* Spatial layout */}
           <Reveal delay={240} className="md:col-span-3">
             <div className="glass-card hover-lift h-full rounded-3xl p-6">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-[oklch(0.6_0.18_280/0.2)] text-[oklch(0.78_0.14_280)]">
@@ -693,7 +732,6 @@ function Manufacturing() {
             </div>
           </Reveal>
 
-          {/* Logistics */}
           <Reveal delay={300} className="md:col-span-3">
             <div className="glass-card hover-lift h-full rounded-3xl p-6">
               <span className="grid h-11 w-11 place-items-center rounded-xl bg-[oklch(0.6_0.18_215/0.22)] text-[oklch(0.78_0.14_215)]">
@@ -701,11 +739,115 @@ function Manufacturing() {
               </span>
               <h3 className="mt-4 text-lg font-semibold">Pan-regional logistics</h3>
               <p className="mt-2 text-sm text-muted-foreground">
-                Owned fleet plus partner distributors covering Chhattisgarh,
-                MP, UP and Haryana with next-day replenishment SLAs.
+                Owned fleet plus partner network covering 12 states with
+                next-day replenishment SLAs.
               </p>
             </div>
           </Reveal>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- B2B Portals ---------------- */
+function Portals() {
+  const portals = [
+    {
+      icon: <Handshake className="h-6 w-6" />,
+      tag: "Distributor Portal",
+      title: "Become a Shyam Beverages Distributor",
+      body: "Secure exclusive territory rights, premium margins, and end-to-end logistics support for our cold drinks and pulp juice categories.",
+      perks: [
+        { i: <TrendingUp className="h-4 w-4" />, t: "Industry-leading margins" },
+        { i: <Truck className="h-4 w-4" />, t: "Cold-chain delivery support" },
+        { i: <PackageCheck className="h-4 w-4" />, t: "Dedicated KAM & training" },
+      ],
+      cta: "Apply as Distributor",
+      hue: "from-[oklch(0.55_0.18_245)] to-[oklch(0.68_0.17_220)]",
+      type: "distributor",
+    },
+    {
+      icon: <Store className="h-6 w-6" />,
+      tag: "Retailer Portal",
+      title: "Stock Shyam Beverages in your store",
+      body: "Onboard frictionlessly with digital catalogues, instant credit checks, and weekly replenishment from our regional depots.",
+      perks: [
+        { i: <PackageCheck className="h-4 w-4" />, t: "Digital catalogue & ordering" },
+        { i: <TrendingUp className="h-4 w-4" />, t: "Display & visibility incentives" },
+        { i: <ShieldCheck className="h-4 w-4" />, t: "Guaranteed freshness SLA" },
+      ],
+      cta: "Apply as Retailer",
+      hue: "from-[oklch(0.6_0.18_280)] to-[oklch(0.55_0.18_320)]",
+      type: "retailer",
+    },
+  ];
+
+  return (
+    <section id="portals" className="relative py-24 sm:py-32">
+      <div className="mx-auto max-w-7xl px-4">
+        <SectionHead
+          eyebrow="B2B Partner Portals"
+          title={
+            <>
+              Frictionless onboarding for
+              <br className="hidden md:block" /> distributors & retailers.
+            </>
+          }
+          sub="Two dedicated B2B channels — designed for serious partners who want premium product, premium margins, and a partner that ships on time."
+        />
+
+        <div className="mt-14 grid gap-5 md:grid-cols-2 md:gap-6">
+          {portals.map((p, i) => (
+            <Reveal key={p.type} delay={i * 120}>
+              <div className="glass-card hover-lift group relative h-full overflow-hidden rounded-3xl p-7 sm:p-8">
+                <div
+                  className={`pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-gradient-to-br ${p.hue} opacity-30 blur-3xl transition-opacity duration-500 group-hover:opacity-60`}
+                />
+                <div className="relative">
+                  <div className="flex items-center gap-3">
+                    <span
+                      className={`grid h-12 w-12 place-items-center rounded-2xl bg-gradient-to-br ${p.hue} text-white shadow-lg`}
+                    >
+                      {p.icon}
+                    </span>
+                    <span className="rounded-full border border-white/10 bg-white/5 px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.18em] text-muted-foreground">
+                      {p.tag}
+                    </span>
+                  </div>
+                  <h3 className="mt-6 text-2xl font-bold leading-tight sm:text-3xl">
+                    {p.title}
+                  </h3>
+                  <p className="mt-3 text-sm leading-relaxed text-muted-foreground sm:text-base">
+                    {p.body}
+                  </p>
+                  <ul className="mt-6 space-y-2.5">
+                    {p.perks.map((perk) => (
+                      <li
+                        key={perk.t}
+                        className="flex items-center gap-3 rounded-xl border border-white/10 bg-white/[0.03] px-3 py-2.5 text-sm"
+                      >
+                        <span className="grid h-7 w-7 place-items-center rounded-lg bg-primary/15 text-primary">
+                          {perk.i}
+                        </span>
+                        {perk.t}
+                      </li>
+                    ))}
+                  </ul>
+                  <div className="mt-7">
+                    <Magnetic>
+                      <a href={`#enquiry`}>
+                        <Button className="btn-hero h-11 rounded-xl px-5 text-sm font-semibold">
+                          {p.cta}
+                          <ArrowRight className="h-4 w-4" />
+                        </Button>
+                      </a>
+                    </Magnetic>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          ))}
         </div>
       </div>
     </section>
@@ -748,8 +890,8 @@ function Enquiry() {
               <div className="mt-10 space-y-4">
                 {[
                   { i: <Phone className="h-4 w-4" />, t: "+91 98765 43210", s: "Partnerships desk · Mon–Sat" },
-                  { i: <Mail className="h-4 w-4" />, t: "partners@aquavista.in", s: "Avg. response under 24 hrs" },
-                  { i: <MapPin className="h-4 w-4" />, t: "Raipur, Chhattisgarh", s: "Headquarters · 6 plant locations" },
+                  { i: <Mail className="h-4 w-4" />, t: "partners@shyambeverages.in", s: "Avg. response under 24 hrs" },
+                  { i: <MapPin className="h-4 w-4" />, t: "Raipur, Chhattisgarh", s: "Headquarters · 7 plant locations" },
                 ].map((c) => (
                   <div key={c.t} className="glass-card flex items-start gap-4 rounded-2xl p-4">
                     <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-primary/15 text-primary">
@@ -772,7 +914,7 @@ function Enquiry() {
               noValidate
             >
               <div className="mb-6 flex items-center gap-2 text-xs uppercase tracking-[0.18em] text-primary">
-                <Building2 className="h-4 w-4" /> Distributor Enquiry
+                <Building2 className="h-4 w-4" /> Partner Enquiry
               </div>
               <div className="grid gap-4 sm:grid-cols-2">
                 <Field id="name" label="Full Name">
@@ -802,28 +944,30 @@ function Enquiry() {
                 </Field>
               </div>
 
-              <Button
-                type="submit"
-                disabled={loading || done}
-                className="btn-hero mt-7 h-12 w-full rounded-xl text-sm font-semibold sm:text-base"
-              >
-                {loading ? (
-                  <>
-                    <Loader2 className="h-4 w-4 animate-spin" />
-                    Submitting application…
-                  </>
-                ) : done ? (
-                  <>
-                    <CheckCircle2 className="h-4 w-4" />
-                    Application received
-                  </>
-                ) : (
-                  <>
-                    Submit Application
-                    <ArrowRight className="h-4 w-4" />
-                  </>
-                )}
-              </Button>
+              <Magnetic strength={0.15} className="mt-7 block w-full">
+                <Button
+                  type="submit"
+                  disabled={loading || done}
+                  className="btn-hero h-12 w-full rounded-xl text-sm font-semibold sm:text-base"
+                >
+                  {loading ? (
+                    <>
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                      Submitting application…
+                    </>
+                  ) : done ? (
+                    <>
+                      <CheckCircle2 className="h-4 w-4" />
+                      Application received
+                    </>
+                  ) : (
+                    <>
+                      Submit Application
+                      <ArrowRight className="h-4 w-4" />
+                    </>
+                  )}
+                </Button>
+              </Magnetic>
               <p className="mt-3 text-center text-[11px] text-muted-foreground">
                 By submitting, you agree to be contacted by our partnerships team.
               </p>
@@ -864,25 +1008,23 @@ function Footer({ onToggleTheme }: { onToggleTheme: () => void }) {
         <div className="grid gap-10 md:grid-cols-4">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5">
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gradient-to-br from-primary to-[oklch(0.78_0.16_230)]">
-                <Droplets className="h-5 w-5 text-primary-foreground" strokeWidth={2.5} />
-              </span>
+              <Monogram />
               <div>
-                <div className="text-sm font-bold">AquaVista Beverages</div>
+                <div className="text-sm font-bold">Shyam Beverages</div>
                 <div className="text-[10px] uppercase tracking-[0.18em] text-muted-foreground">
-                  Refreshing since 2003
+                  Refreshing since 2000
                 </div>
               </div>
             </div>
             <p className="mt-5 max-w-md text-sm text-muted-foreground">
-              A regional beverage manufacturer trusted across Chhattisgarh,
-              Madhya Pradesh, Uttar Pradesh and Haryana. Built on quality,
-              scaled by partnership.
+              A large-scale Indian beverage manufacturer specialising in premium
+              cold drinks and pulp-based juices. Built on quality, scaled by
+              partnership.
             </p>
             <div className="mt-5 flex items-start gap-2 text-sm text-muted-foreground">
               <MapPin className="mt-0.5 h-4 w-4 shrink-0 text-primary" />
               <span>
-                AquaVista Industrial Park, Sector 7,
+                Shyam Industrial Park, Sector 7,
                 <br />
                 Urla, Raipur, Chhattisgarh 493221, India
               </span>
@@ -896,9 +1038,10 @@ function Footer({ onToggleTheme }: { onToggleTheme: () => void }) {
             <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
               {[
                 ["Home", "#home"],
-                ["About Us", "#about"],
+                ["Legacy", "#about"],
                 ["Products", "#products"],
                 ["Manufacturing", "#manufacturing"],
+                ["B2B Portals", "#portals"],
                 ["Enquiry", "#enquiry"],
               ].map(([l, h]) => (
                 <li key={l}>
@@ -919,7 +1062,7 @@ function Footer({ onToggleTheme }: { onToggleTheme: () => void }) {
                 <Phone className="h-3.5 w-3.5 text-primary" /> +91 98765 43210
               </li>
               <li className="flex items-center gap-2">
-                <Mail className="h-3.5 w-3.5 text-primary" /> partners@aquavista.in
+                <Mail className="h-3.5 w-3.5 text-primary" /> partners@shyambeverages.in
               </li>
             </ul>
           </div>
@@ -927,7 +1070,7 @@ function Footer({ onToggleTheme }: { onToggleTheme: () => void }) {
 
         <div className="mt-12 flex flex-col items-start justify-between gap-3 border-t border-white/10 pt-6 text-xs text-muted-foreground sm:flex-row sm:items-center">
           <div className="flex items-center gap-2">
-            <span>© 2026 AquaVista Beverages Pvt. Ltd. All rights reserved.</span>
+            <span>© 2026 Shyam Beverages Pvt. Ltd. All rights reserved.</span>
             {/* Secret theme toggle — intentionally subtle */}
             <button
               aria-label="Toggle theme"
@@ -952,7 +1095,7 @@ function Landing() {
   const [theme, setTheme] = useState<"dark" | "light">("dark");
 
   useEffect(() => {
-    const stored = (typeof window !== "undefined" && localStorage.getItem("av-theme")) as
+    const stored = (typeof window !== "undefined" && localStorage.getItem("sb-theme")) as
       | "dark"
       | "light"
       | null;
@@ -963,7 +1106,7 @@ function Landing() {
     const root = document.documentElement;
     root.classList.toggle("light", theme === "light");
     try {
-      localStorage.setItem("av-theme", theme);
+      localStorage.setItem("sb-theme", theme);
     } catch {}
   }, [theme]);
 
@@ -978,10 +1121,10 @@ function Landing() {
         <About />
         <Products />
         <Manufacturing />
+        <Portals />
         <Enquiry />
       </main>
       <Footer onToggleTheme={toggleTheme} />
     </div>
   );
 }
-
