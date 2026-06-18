@@ -10,7 +10,7 @@ import {
   Factory,
   ShieldCheck,
   Gauge,
-  Droplets,
+  // Droplets unused after monogram
   CupSoda,
   GlassWater,
   MapPin,
