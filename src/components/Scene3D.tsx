@@ -29,7 +29,6 @@ function LiquidOrb({
   return (
     <mesh ref={ref} position={position} scale={scale}>
       <sphereGeometry args={[1, 64, 64]} />
-      {/* @ts-expect-error drei material props */}
       <MeshDistortMaterial
         color={color}
         speed={1.4}
